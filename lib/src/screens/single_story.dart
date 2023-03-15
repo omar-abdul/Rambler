@@ -7,7 +7,7 @@ class SingleStory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(title: 'Story'),
+        appBar: CustomAppBar(title: 'Story'),
         body: Center(
           child: Column(
             children: [

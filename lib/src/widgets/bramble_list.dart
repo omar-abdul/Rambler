@@ -1,8 +1,10 @@
+import 'package:bramble_project/src/screens/write_story.dart';
 import 'package:bramble_project/src/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/single_story.dart';
 
+// ignore: todo
 // TODO: replace static story with dynamic from db;
 
 class BrambleList extends StatelessWidget {
@@ -49,7 +51,13 @@ class BrambleList extends StatelessWidget {
           ],
         ),
       ),
-      appBar: const CustomAppBar(title: 'Feed'),
+      appBar: CustomAppBar(
+        title: 'Feed',
+        myactions: <Widget>[
+          IconButton(
+              onPressed: () => print('pressed'), icon: Icon(Icons.search))
+        ],
+      ),
       body: ListView.builder(
         itemCount: story.length,
         itemBuilder: (context, index) {
@@ -107,13 +115,19 @@ class BrambleList extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                    Container(
-                                      width: 15,
-                                      height: 5,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.black45,
-                                      ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 15,
+                                          height: 5,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     Text.rich(
                                       TextSpan(
@@ -145,6 +159,15 @@ class BrambleList extends StatelessWidget {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const WriteStory()))
+        },
+        focusColor: Theme.of(context).primaryColor,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.create),
       ),
     );
   }
