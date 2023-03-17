@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "646678124422",
+    "project_id": "bramble-a62de",
+    "storage_bucket": "bramble-a62de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646678124422:android:8de297cb3c53f5f9ad3e07",
+        "android_client_info": {
+          "package_name": "com.example.bramble_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "646678124422-c2huqqfsdefqidjricqa2g7ac95cels7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZfbta4pZ0MwAigLVuC4EYbGKoeg5vCX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "646678124422-c2huqqfsdefqidjricqa2g7ac95cels7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "646678124422-rjbhk99d18a3ab96e43n3do5faff4qiv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.brambleProject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
