@@ -2,9 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 
+import '../states/form_state.dart';
+import 'word_count_button.dart';
+
 class CustomForm extends StatefulWidget {
-  const CustomForm({super.key, required this.addStory});
+  const CustomForm(
+      {super.key,
+      required this.addStory,
+      required this.wordLength,
+      required this.wordsLeft,
+      required this.changeLength});
   final FutureOr<void> Function(Map story) addStory;
+  final int wordLength;
+  final int wordsLeft;
+  final FutureOr<void> Function(int newLength) changeLength;
   @override
   State<CustomForm> createState() {
     return _CustomFormState();
@@ -21,9 +32,9 @@ class _CustomFormState extends State<CustomForm> {
   int? numOfWords;
   late ThemeData t;
 
-  int type1 = 100;
-  int type2 = 200;
-  int type3 = 300;
+  int type1 = 50;
+  int type2 = 75;
+
   @override
   void initState() {
     super.initState();
@@ -72,15 +83,21 @@ class _CustomFormState extends State<CustomForm> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      WordElevatedButton(wordLength: type1),
-                      WordElevatedButton(wordLength: type2),
-                      WordElevatedButton(wordLength: type3),
+                      const Text('Max Number of words : '),
+                      WordElevatedButton(
+                          wordLength: type1,
+                          currLength: widget.wordLength,
+                          changeLength: widget.changeLength),
+                      WordElevatedButton(
+                          wordLength: type2,
+                          currLength: widget.wordLength,
+                          changeLength: widget.changeLength),
                     ],
                   ),
                 ),
                 Consumer<WordsLengthState>(
                     builder: (builder, word, child) => Text(
-                          '${word.wordsLeft}/${word.wordLength}',
+                          '${widget.wordsLeft}/${widget.wordLength}',
                           textAlign: TextAlign.start,
                         )),
                 Expanded(
@@ -139,15 +156,17 @@ class _CustomFormState extends State<CustomForm> {
                                   )),
                             ],
                           ),
-                          ElevatedButton(
+                          FilledButton(
+                              style: const ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(
+                                          Colors.orange)),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   await widget.addStory({
                                     'title': textController[0].text,
                                     'body': textController[1].text,
-                                    'count': context
-                                        .read<WordsLengthState>()
-                                        .wordLength
+                                    'count': widget.wordLength
                                   });
                                   textController.map((e) => e.clear());
                                 }
@@ -169,46 +188,5 @@ class _CustomFormState extends State<CustomForm> {
         );
       },
     );
-  }
-}
-
-class WordsLengthState with ChangeNotifier {
-  int wordLength = 100;
-  int wordsLeft = 0;
-  void changeLength(int newLength) {
-    wordLength = newLength;
-    notifyListeners();
-  }
-
-  void upDateWordCount(int inputText) {
-    wordsLeft = inputText;
-    notifyListeners();
-  }
-}
-
-class WordElevatedButton extends StatelessWidget {
-  const WordElevatedButton({super.key, required this.wordLength});
-  final int wordLength;
-
-  @override
-  Widget build(BuildContext context) {
-    final int currLength = Provider.of<WordsLengthState>(context).wordLength;
-    return ElevatedButton(
-        onPressed: () {
-          var word = context.read<WordsLengthState>();
-
-          word.changeLength(wordLength);
-        },
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                (states) =>
-                    currLength == wordLength ? Colors.orange.shade400 : null),
-            foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                (states) => currLength == wordLength
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : null),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18)))),
-        child: Text('$wordLength'));
   }
 }

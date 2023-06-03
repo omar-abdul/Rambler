@@ -1,174 +1,182 @@
+import 'package:bramble_project/src/screens/auth.dart';
+import 'package:bramble_project/src/states/app_state.dart';
 import 'package:bramble_project/src/screens/write_story.dart';
 import 'package:bramble_project/src/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../classes/bramble.dart';
 import '../screens/single_story.dart';
 
-// ignore: todo
-// TODO: replace static story with dynamic from db;
-
 class BrambleList extends StatelessWidget {
-  const BrambleList({
-    super.key,
-    required this.story,
-  });
-
-  final List<Map> story;
+  const BrambleList({super.key, required this.brambleList});
+  final List<Bramble> brambleList;
   final int likesNum = 5;
   final int commentsNum = 4;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.orange),
-              child:
-                  Text('Drawer Header', style: TextStyle(color: Colors.white)),
-            ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Item 2'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      appBar: CustomAppBar(
-        title: 'Feed',
-        myactions: <Widget>[
-          IconButton(
-              onPressed: () => print('pressed'), icon: Icon(Icons.search))
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: story.length,
-        itemBuilder: (context, index) {
-          return Center(
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              child: Card(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                SingleStory(story: story[index])));
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        title: Text(story[index]['title']),
-                      ),
-                      Flexible(
-                          child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              story[index]['body'],
-                              maxLines: 4,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 4, 10, 4),
-                                  child: Row(children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: '$likesNum',
-                                          ),
-                                          const WidgetSpan(
-                                            child: Icon(
-                                              Icons.favorite_outline,
-                                              size: 20,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 15,
-                                          height: 5,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.black45,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: '$commentsNum',
-                                          ),
-                                          const WidgetSpan(
-                                            child: Icon(
-                                              Icons.comment_outlined,
-                                              size: 20,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ]),
-                                ),
-                              ])
-                        ],
-                      ))
-                    ],
-                  ),
+    return Consumer<ApplicationState>(
+        builder: (context, appState, child) => Scaffold(
+              drawer: Drawer(
+                child: ListView(
+                  // Important: Remove any padding from the ListView.
+                  padding: EdgeInsets.zero,
+                  children: [
+                    const DrawerHeader(
+                      decoration: BoxDecoration(color: Colors.orange),
+                      child: Text('Drawer Header',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                    ListTile(
+                      title: const Text('Item 1'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Item 2'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
                 ),
               ),
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const WriteStory()))
-        },
-        focusColor: Theme.of(context).primaryColor,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.create),
-      ),
-    );
+              appBar: CustomAppBar(
+                title: 'Feed',
+                myactions: const <Widget>[
+                  IconButton(onPressed: null, icon: Icon(Icons.search))
+                ],
+              ),
+              body: ListView.builder(
+                itemCount: brambleList.length,
+                itemBuilder: (context, index) {
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Card(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SingleStory(
+                                        story: brambleList[index])));
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                title: Text(brambleList[index].title),
+                              ),
+                              Flexible(
+                                  child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                                    child: Text(
+                                      brambleList[index].body,
+                                      maxLines: 4,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 4, 10, 4),
+                                          child: Row(children: [
+                                            Text.rich(
+                                              TextSpan(
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: '$likesNum',
+                                                  ),
+                                                  const WidgetSpan(
+                                                    child: Icon(
+                                                      Icons.favorite_outline,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 15,
+                                                  height: 5,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.black45,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Text.rich(
+                                              TextSpan(
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: '$commentsNum',
+                                                  ),
+                                                  const WidgetSpan(
+                                                    child: Icon(
+                                                      Icons.comment_outlined,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ]),
+                                        ),
+                                      ])
+                                ],
+                              ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AuthGate(),
+                      ));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const WriteStory()));
+                },
+                focusColor: Theme.of(context).primaryColor,
+                shape: const CircleBorder(),
+                child: const Icon(Icons.create),
+              ),
+            ));
   }
 }

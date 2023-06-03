@@ -1,26 +1,24 @@
-import 'package:bramble_project/src/widgets/custom_app_bar.dart';
-
 import 'package:flutter/material.dart';
 
-import '../classes/bramble.dart';
+import 'custom_app_bar.dart';
 
-class SingleStory extends StatelessWidget {
-  const SingleStory({required this.story, super.key});
-  final Bramble story;
+class SingleStoryWidget extends StatelessWidget {
+  const SingleStoryWidget({super.key, required this.story});
+  final Map story;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(title: story.title.toString().toUpperCase()),
+        appBar: CustomAppBar(title: story['title'].toString().toUpperCase()),
         body: Center(
           child: Column(
             children: [
               ListTile(
-                title: Text(story.title),
+                title: Text(story['title']),
                 subtitle: const Text('author'),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(story.body),
+                child: Text(story['body']),
               ),
               Flexible(
                   child: Container(
