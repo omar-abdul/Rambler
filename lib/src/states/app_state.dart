@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:bramble_project/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide EmailAuthProvider, PhoneAuthProvider;
 
@@ -8,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../firebase_options.dart';
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -27,27 +28,23 @@ class ApplicationState extends ChangeNotifier {
   List<Bramble> get brambleList => _brambleList;
 
   Future<void> init() async {
-    _loading = true;
-
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-    print('${Firebase.apps} apps firebase');
-
     FirebaseUIAuth.configureProviders([EmailAuthProvider()]);
+    _loading = true;
+    _brambleList = [];
+    final snapshots = await getStories();
+    for (final doc in snapshots.docs) {
+      _brambleList
+          .add(Bramble(title: doc.data()['title'], body: doc.data()['body']));
+    }
     FirebaseAuth.instance.userChanges().listen((user) async {
       if (user != null) {
         _loggedIn = true;
-        _brambleList = [];
-        final snapshots = await getStories();
-        for (final doc in snapshots.docs) {
-          _brambleList.add(
-              Bramble(title: doc.data()['title'], body: doc.data()['body']));
-        }
-        _loading = false;
+
         notifyListeners();
       } else {
         _loggedIn = false;
       }
+      _loading = false;
       notifyListeners();
     });
   }
@@ -71,6 +68,7 @@ class ApplicationState extends ChangeNotifier {
   }
 
   addToList() async {
+    _loading = true;
     _brambleList = [];
     final snapshots = await getStories();
 
@@ -80,6 +78,7 @@ class ApplicationState extends ChangeNotifier {
     }
 
     notifyListeners();
+    _loading = false;
   }
 
   tobeused() async {

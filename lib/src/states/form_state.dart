@@ -10,6 +10,7 @@ class WordsLengthState with ChangeNotifier {
 
   void upDateWordCount(int inputText) {
     wordsLeft = inputText;
+
     notifyListeners();
   }
 }

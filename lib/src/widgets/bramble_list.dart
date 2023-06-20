@@ -1,12 +1,12 @@
 import 'package:bramble_project/src/screens/auth.dart';
 import 'package:bramble_project/src/states/app_state.dart';
-import 'package:bramble_project/src/screens/write_story.dart';
 import 'package:bramble_project/src/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../classes/bramble.dart';
 import '../screens/single_story.dart';
+import '../screens/write_story.dart';
 
 class BrambleList extends StatelessWidget {
   const BrambleList({super.key, required this.brambleList});
@@ -49,9 +49,9 @@ class BrambleList extends StatelessWidget {
                   ],
                 ),
               ),
-              appBar: CustomAppBar(
+              appBar: const CustomAppBar(
                 title: 'Feed',
-                myactions: const <Widget>[
+                myactions: <Widget>[
                   IconButton(onPressed: null, icon: Icon(Icons.search))
                 ],
               ),
@@ -166,7 +166,8 @@ class BrambleList extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AuthGate(),
+                        builder: (context) =>
+                            const AuthGate(route: WriteStory()),
                       ));
                   // Navigator.push(
                   //     context,

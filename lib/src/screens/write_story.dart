@@ -12,34 +12,23 @@ class WriteStory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<String> fetchUserOrder() =>
-        // Imagine that this function is
-        // more complex and slow.
-        Future.delayed(
-          const Duration(seconds: 4),
-          () => 'Large Latte',
-        );
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Write Story',
       ),
       body: ChangeNotifierProvider(
           create: (context) => WordsLengthState(),
           builder: (context, child) {
             var appState = Provider.of<ApplicationState>(context);
-            var wordState = Provider.of<WordsLengthState>(context);
 
             return LoadingSpinner(
               loading: appState.loading!,
               child: CustomForm(
                 addStory: (story) async {
                   appState.loading = true;
-                  var ref = await appState.addStoryToDb(story);
+                  await appState.addStoryToDb(story);
                   appState.loading = false;
                 },
-                changeLength: wordState.changeLength,
-                wordLength: wordState.wordLength,
-                wordsLeft: wordState.wordsLeft,
               ),
             );
           }),
