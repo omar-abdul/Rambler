@@ -1,6 +1,9 @@
 import 'package:bramble_project/src/screens/auth.dart';
+import 'package:bramble_project/src/screens/home.dart';
 import 'package:bramble_project/src/states/app_state.dart';
 import 'package:bramble_project/src/widgets/custom_app_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,15 +40,28 @@ class BrambleList extends StatelessWidget {
                         Navigator.pop(context);
                       },
                     ),
-                    ListTile(
-                      title: const Text('Item 2'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
+                    Visibility(
+                        visible: appState.loggedIn,
+                        child: ListTile(
+                            leading: const Icon(Icons.logout),
+                            title: const Text('Sign Out'),
+                            onTap: () async {
+                              await FirebaseAuth.instance
+                                  .signOut()
+                                  .then((value) => {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    'You have logged out'))),
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (
+                                              context,
+                                            ) =>
+                                                    const HomePage()))
+                                      });
+                            })),
                   ],
                 ),
               ),
@@ -169,10 +185,6 @@ class BrambleList extends StatelessWidget {
                         builder: (context) =>
                             const AuthGate(route: WriteStory()),
                       ));
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const WriteStory()));
                 },
                 focusColor: Theme.of(context).primaryColor,
                 shape: const CircleBorder(),

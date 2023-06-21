@@ -9,12 +9,9 @@ class AuthGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(builder: (con, appState, _) {
-      // return ElevatedButton(
-      //     onPressed: () {
-      //       Navigator.push(context,
-      //           MaterialPageRoute(builder: (context) => const SignInScreen()));
-      //     },
-      //     child: const Text('test'));
+      if (appState.loggedIn) {
+        return route;
+      }
 
       return SignInScreen(
         actions: [
@@ -22,10 +19,6 @@ class AuthGate extends StatelessWidget {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (ctx) => route));
           }),
-          AuthStateChangeAction<UserCreated>((context, state) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (ctx) => route));
-          })
         ],
       );
     });

@@ -30,7 +30,7 @@ class ApplicationState extends ChangeNotifier {
   Future<void> init() async {
     FirebaseUIAuth.configureProviders([EmailAuthProvider()]);
     _loading = true;
-    _brambleList = [];
+
     final snapshots = await getStories();
     for (final doc in snapshots.docs) {
       _brambleList
@@ -68,7 +68,6 @@ class ApplicationState extends ChangeNotifier {
   }
 
   addToList() async {
-    _loading = true;
     _brambleList = [];
     final snapshots = await getStories();
 
@@ -78,7 +77,6 @@ class ApplicationState extends ChangeNotifier {
     }
 
     notifyListeners();
-    _loading = false;
   }
 
   tobeused() async {

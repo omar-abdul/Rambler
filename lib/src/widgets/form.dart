@@ -122,19 +122,19 @@ class _CustomFormState extends State<CustomForm> {
                               TextSelection.fromPosition(
                                   TextPosition(offset: trimmedText.length));
                         }
-                        final textWithoutExtraSpaces =
-                            textController[1].text.trim();
+                        // final textWithoutExtraSpaces =
+                        //     textController[1].text.trim();
 
-                        if (textWithoutExtraSpaces.length + value.length >
-                            wordCount.wordLength) {
-                          final longText = textWithoutExtraSpaces.split('');
-                          final trimmedLongText =
-                              longText.take(wordCount.wordLength).join('');
-                          textController[1].text = trimmedLongText;
-                          textController[1].selection =
-                              TextSelection.fromPosition(
-                                  TextPosition(offset: trimmedLongText.length));
-                        }
+                        // if (textWithoutExtraSpaces.length + value.length >
+                        //     wordCount.wordLength) {
+                        //   final longText = textWithoutExtraSpaces.split('');
+                        //   final trimmedLongText =
+                        //       longText.take(wordCount.wordLength).join('');
+                        //   textController[1].text = trimmedLongText;
+                        //   textController[1].selection =
+                        //       TextSelection.fromPosition(
+                        //           TextPosition(offset: trimmedLongText.length));
+                        // }
                       },
                       textCapitalization: TextCapitalization.sentences,
                       decoration:
@@ -185,15 +185,17 @@ class _CustomFormState extends State<CustomForm> {
                             if (_formKey.currentState!.validate()) {
                               var wordCount = context.read<WordsLengthState>();
                               if (wordCount.wordsLeft > wordCount.wordLength) {
-                                return;
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        'Your story has more words than the chosen length of ${wordCount.wordLength}')));
+                              } else {
+                                await widget.addStory({
+                                  'title': textController[0].text,
+                                  'body': textController[1].text,
+                                  'count': wordCount.wordLength
+                                });
+                                textController.map((e) => e.clear());
                               }
-
-                              await widget.addStory({
-                                'title': textController[0].text,
-                                'body': textController[1].text,
-                                'count': wordCount.wordLength
-                              });
-                              textController.map((e) => e.clear());
                             }
                           },
                           child: const Row(
